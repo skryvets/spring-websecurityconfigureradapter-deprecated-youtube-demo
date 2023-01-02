@@ -1,23 +1,27 @@
 package com.example.cloudstorage.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .formLogin()
-                .loginPage("/login").permitAll().and()
-                .logout().permitAll().and()
+            .and()
+            .headers().disable()
+            .csrf().disable()
             .antMatcher("/**")
             .authorizeRequests()
                 .antMatchers("/public").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 //...
                 .anyRequest()
                 .authenticated();
+        return http.build();
     }
 }
