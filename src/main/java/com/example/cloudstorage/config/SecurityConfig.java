@@ -12,7 +12,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .formLogin()
-            .and()
+            .disable()
             .headers().disable()
             .csrf().disable()
             .antMatcher("/**")
